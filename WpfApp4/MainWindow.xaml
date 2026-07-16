@@ -1,0 +1,55 @@
+﻿<Window x:Class="WpfApp4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:WpfApp4.ViewModels"
+        xmlns:views="clr-namespace:WpfApp4.Views"
+        mc:Ignorable="d"
+        Title="WpfApp4" Height="500" Width="900">
+
+    <Window.Resources>
+        <!-- Map each ViewModel type to its View -->
+        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+            <views:HomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+            <views:SettingsView/>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Navigation sidebar -->
+        <Border Grid.Column="0" Background="#1E1E2E">
+            <StackPanel Margin="0,24,0,0">
+                <TextBlock Text="MyApp" Foreground="White" FontSize="20"
+                           FontWeight="Bold" Margin="20,0,0,24"/>
+
+                <Button Content="🏠  Home"
+                        Command="{Binding NavigateHomeCommand}"
+                        Style="{StaticResource NavButtonStyle}"/>
+
+                <Button Content="📊  Dashboard"
+                        Command="{Binding NavigateDashboardCommand}"
+                        Style="{StaticResource NavButtonStyle}"/>
+
+                <Button Content="⚙️  Settings"
+                        Command="{Binding NavigateSettingsCommand}"
+                        Style="{StaticResource NavButtonStyle}"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Content area — swaps based on CurrentViewModel type -->
+        <ContentControl Grid.Column="1"
+                        Content="{Binding CurrentViewModel}"/>
+    </Grid>
+</Window>
+
