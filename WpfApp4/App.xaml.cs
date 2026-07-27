@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using System.Windows;
 using WpfApp4.Services;
 using WpfApp4.ViewModels;
+using WpfApp4.Views;
 
 namespace WpfApp4
 {
@@ -18,21 +19,35 @@ namespace WpfApp4
                     // Services
                     services.AddSingleton<IGreetingService, GreetingService>();
                     services.AddSingleton<INavigationService, NavigationService>();
+                    services.AddSingleton<IAuthService, AuthService>();
 
                     // ViewModels
                     services.AddSingleton<MainViewModel>();
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<DashboardViewModel>();
                     services.AddTransient<SettingsViewModel>();
+                    services.AddTransient<LoginViewModel>();
 
                     // Shell
                     services.AddSingleton<MainWindow>();
+                    services.AddTransient<LoginWindow>();
                 })
                 .Build();
 
             await _host.StartAsync();
 
-            _host.Services.GetRequiredService<MainWindow>().Show();
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+            var loginWindow = _host.Services.GetRequiredService<LoginWindow>();
+            if (loginWindow.ShowDialog() == true)
+            {
+                ShutdownMode = ShutdownMode.OnMainWindowClose;
+                _host.Services.GetRequiredService<MainWindow>().Show();
+            }
+            else
+            {
+                Shutdown();
+            }
         }
 
         protected override async void OnExit(ExitEventArgs e)
