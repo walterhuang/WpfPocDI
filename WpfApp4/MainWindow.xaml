@@ -19,37 +19,73 @@
         <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
             <views:SettingsView/>
         </DataTemplate>
+
+        <!-- Dark menu bar style matching VS theme -->
+        <Style x:Key="DarkMenuStyle" TargetType="Menu">
+            <Setter Property="Background" Value="#1E1E1E"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="DarkTopMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#CC3030"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsSubmenuOpen" Value="True">
+                    <Setter Property="Background" Value="#CC3030"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DarkSubMenuItemStyle" TargetType="MenuItem">
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+            <Setter Property="Background" Value="#2D2D2D"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="#3E3E40"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+    <DockPanel>
+        <!-- Top menu bar -->
+        <Menu DockPanel.Dock="Top" Style="{StaticResource DarkMenuStyle}">
 
-        <!-- Navigation sidebar -->
-        <Border Grid.Column="0" Background="#1E1E2E">
-            <StackPanel Margin="0,24,0,0">
-                <TextBlock Text="MyApp" Foreground="White" FontSize="20"
-                           FontWeight="Bold" Margin="20,0,0,24"/>
+            <MenuItem Header="Navigate" Style="{StaticResource DarkTopMenuItemStyle}">
+                <MenuItem Header="🏠  Home"
+                          Command="{Binding NavigateHomeCommand}"
+                          Style="{StaticResource DarkSubMenuItemStyle}"/>
+                <MenuItem Header="📊  Dashboard"
+                          Command="{Binding NavigateDashboardCommand}"
+                          Style="{StaticResource DarkSubMenuItemStyle}"/>
+                <Separator Background="#444"/>
+                <MenuItem Header="⚙️  Settings"
+                          Command="{Binding NavigateSettingsCommand}"
+                          Style="{StaticResource DarkSubMenuItemStyle}"/>
+            </MenuItem>
 
-                <Button Content="🏠  Home"
-                        Command="{Binding NavigateHomeCommand}"
-                        Style="{StaticResource NavButtonStyle}"/>
+            <MenuItem Header="View" Style="{StaticResource DarkTopMenuItemStyle}">
+                <MenuItem Header="🏠  Home"
+                          Command="{Binding NavigateHomeCommand}"
+                          Style="{StaticResource DarkSubMenuItemStyle}"/>
+                <MenuItem Header="📊  Dashboard"
+                          Command="{Binding NavigateDashboardCommand}"
+                          Style="{StaticResource DarkSubMenuItemStyle}"/>
+            </MenuItem>
 
-                <Button Content="📊  Dashboard"
-                        Command="{Binding NavigateDashboardCommand}"
-                        Style="{StaticResource NavButtonStyle}"/>
-
-                <Button Content="⚙️  Settings"
-                        Command="{Binding NavigateSettingsCommand}"
-                        Style="{StaticResource NavButtonStyle}"/>
-            </StackPanel>
-        </Border>
+        </Menu>
 
         <!-- Content area — swaps based on CurrentViewModel type -->
-        <ContentControl Grid.Column="1"
-                        Content="{Binding CurrentViewModel}"/>
-    </Grid>
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+    </DockPanel>
 </Window>
 
