@@ -9,6 +9,8 @@
         Title="WpfApp4" Height="500" Width="900">
 
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+
         <!-- Map each ViewModel type to its View -->
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView/>
@@ -84,8 +86,34 @@
 
         </Menu>
 
-        <!-- Content area — swaps based on CurrentViewModel type -->
-        <ContentControl Content="{Binding CurrentViewModel}"/>
+        <!-- Tabbed content area — each tab's Content resolves via the DataTemplates above -->
+        <TabControl ItemsSource="{Binding Tabs}"
+                    SelectedItem="{Binding SelectedTab}">
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Header}" VerticalAlignment="Center"/>
+                        <Button Content="✕"
+                                Margin="8,0,0,0"
+                                Padding="3,0"
+                                FontSize="10"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                VerticalAlignment="Center"
+                                ToolTip="Close"
+                                Visibility="{Binding IsClosable, Converter={StaticResource BoolToVisibility}}"
+                                Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"
+                                CommandParameter="{Binding}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate DataType="{x:Type vm:TabItemViewModel}">
+                    <ContentControl Content="{Binding Content}"/>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
     </DockPanel>
 </Window>
 
