@@ -9,8 +9,6 @@
         Title="WpfApp4" Height="500" Width="900">
 
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
-
         <!-- Map each ViewModel type to its View -->
         <DataTemplate DataType="{x:Type vm:HomeViewModel}">
             <views:HomeView/>
@@ -20,6 +18,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
             <views:SettingsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <views:LoginView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AccessDeniedViewModel}">
+            <views:AccessDeniedView/>
         </DataTemplate>
 
         <!-- Dark menu bar style matching VS theme -->
@@ -81,6 +85,16 @@
                           Style="{StaticResource DarkSubMenuItemStyle}"/>
                 <MenuItem Header="📊  Dashboard"
                           Command="{Binding NavigateDashboardCommand}"
+                          Style="{StaticResource DarkSubMenuItemStyle}"/>
+            </MenuItem>
+
+            <MenuItem Header="{Binding AccountHeader}" Style="{StaticResource DarkTopMenuItemStyle}">
+                <MenuItem Header="{Binding SignedInAsText}"
+                          IsEnabled="False"
+                          Style="{StaticResource DarkSubMenuItemStyle}"/>
+                <Separator Background="#444"/>
+                <MenuItem Header="🚪  Sign out"
+                          Command="{Binding LogoutCommand}"
                           Style="{StaticResource DarkSubMenuItemStyle}"/>
             </MenuItem>
 

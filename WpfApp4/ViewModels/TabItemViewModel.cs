@@ -2,16 +2,27 @@ namespace WpfApp4.ViewModels
 {
     public class TabItemViewModel : BaseViewModel
     {
-        public TabItemViewModel(string header, BaseViewModel content, bool isClosable)
+        private BaseViewModel? _content;
+
+        public TabItemViewModel(string header, Type pageType, bool isClosable)
         {
             Header = header;
-            Content = content;
+            PageType = pageType;
             IsClosable = isClosable;
         }
 
         public string Header { get; }
-        public BaseViewModel Content { get; }
-        public Type ViewModelType => Content.GetType();
+
+        // The requested page; identifies the tab even while it shows Login or Access Denied
+        public Type PageType { get; }
+
+        // The page itself, or a LoginViewModel / AccessDeniedViewModel standing in for it
+        public BaseViewModel? Content
+        {
+            get => _content;
+            set => SetProperty(ref _content, value);
+        }
+
         public bool IsClosable { get; }
     }
 }

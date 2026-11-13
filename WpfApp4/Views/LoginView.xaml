@@ -1,0 +1,34 @@
+<UserControl x:Class="WpfApp4.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Loaded="OnLoaded"
+             DataContextChanged="OnDataContextChanged">
+    <StackPanel Width="300" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Text="🔐  Sign in" FontSize="28" FontWeight="Bold" Margin="0,0,0,12"/>
+        <TextBlock Text="{Binding Prompt}" FontSize="14" Foreground="Gray" TextWrapping="Wrap" Margin="0,0,0,16"/>
+
+        <TextBlock Text="User name" Margin="0,0,0,4"/>
+        <TextBox x:Name="UserNameBox"
+                 Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"
+                 Padding="4"
+                 Margin="0,0,0,12"/>
+
+        <TextBlock Text="Password" Margin="0,0,0,4"/>
+        <PasswordBox x:Name="PasswordBox"
+                     PasswordChanged="OnPasswordChanged"
+                     Padding="4"
+                     Margin="0,0,0,12"/>
+
+        <TextBlock Text="{Binding ErrorMessage}"
+                   Foreground="#CC3030"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,12"
+                   Visibility="{Binding HasError, Converter={StaticResource BoolToVisibility}}"/>
+
+        <Button Content="Sign in"
+                IsDefault="True"
+                Command="{Binding LoginCommand}"
+                Padding="16,6"
+                HorizontalAlignment="Right"/>
+    </StackPanel>
+</UserControl>
