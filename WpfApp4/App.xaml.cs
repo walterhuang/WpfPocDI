@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Windows;
+using WpfApp4.Auth;
 using WpfApp4.Services;
 using WpfApp4.ViewModels;
 
@@ -19,11 +20,20 @@ namespace WpfApp4
                     services.AddSingleton<IGreetingService, GreetingService>();
                     services.AddSingleton<INavigationService, NavigationService>();
 
+                    // Auth (POC: users / roles / access rights come from appsettings.json).
+                    // Swap the two stores for Web API / SQL implementations later.
+                    services.Configure<AuthOptions>(context.Configuration.GetSection(AuthOptions.SectionName));
+                    services.AddSingleton<IUserStore, ConfigurationUserStore>();
+                    services.AddSingleton<IAccessRightsStore, ConfigurationAccessRightsStore>();
+                    services.AddSingleton<IAuthService, AuthService>();
+
                     // ViewModels
                     services.AddSingleton<MainViewModel>();
                     services.AddTransient<HomeViewModel>();
                     services.AddTransient<DashboardViewModel>();
                     services.AddTransient<SettingsViewModel>();
+                    services.AddTransient<LoginViewModel>();
+                    services.AddTransient<AccessDeniedViewModel>();
 
                     // Shell
                     services.AddSingleton<MainWindow>();
